@@ -51,7 +51,7 @@ def checkEmptyGrid():
 
 def main():
     # Fill the grid with value
-    for i in range(0,10):
+    for i in range(0,2):
         if checkEmptyGrid() == True:
             addOneValue()
 
@@ -91,78 +91,67 @@ def displayBoard():
 
 
 def movementDown():
+    def checkLockedGrid(searchRow,col):
+        for element in lockedGridList:
+            if element[0] == searchRow and element[1] == col:
+                return True
+    #Set movement values for the loops
+
     for col in range(0, gridSize):
-        # Initial bottom grid
-        bottomGrid = boardList[gridSize - 1][col]
-        # Get bottomGrid value
-        if bottomGrid == 0:
-            for row in range(gridSize - 2, -1, 1):
-                upperValue = boardList[row][col]
-                if upperValue != 0:
-                    boardList[bottomGrid][col] = upperValue
-                    upperValue = 0
-                    break
-        # Check if bottom grid is still 0 after getting value
-        if bottomGrid == 0:
-            continue
+        #For each row before the end of grid. Descending order
+        print("Column Number: ", col)
+        lockedGridList = []  # [ [3,1],[]]
         for row in range(gridSize-2, -1, -1):
-            upperValue = boardList[row][col]
-            if upperValue != 0:
-                aboveGrid = boardList[row-1][col]
-                if bottomGrid == upperValue:
-                    result = bottomGrid+upperValue
-                    bottomGrid = result
+            #Check if comparingGrid is empty
+            if boardList[row][col] == 0:
+                continue
 
-        # IF bottomGrid has uppervalue
-        # # Move down values
-        #     FOR uppervalue IN range(gridSize-2,-1,-1)
-        #         IF uppervalue has value
-        #             SET aboveGrid = bottomGrid-1
-        #             If bottomGrid == upperValue
-        #                         ADD two together
-        #                         Place result at bottomGrid
-        #                         Delete uppervalue
-        #             ELIF upperValue == aboveGrid
-        #                 SET bottomgrid AS uppervalue
-        #                 # uppervalue -= 1
-        #             ELIF aboveGrid == 0
-        #                 SET aboveGrid AS upperGrid
-        #             ELSE
-        #                 DO NOTHING
-        #
-        #         ELIF uppervalue no value
-        #             CONTINUE
+            currentEmptyGrid = None
+            comparingGridCombined = False
 
 
+            #Search through the grids below
+            for searchRow in range(row+1, gridSize,1):
+                #Check if the searched grid is in the lockedGridList
+                if checkLockedGrid(searchRow,col) == True:
+                    break
 
+                #Check if the searched grid is empty
+                if boardList[searchRow][col] == 0:
+                    currentEmptyGrid = [searchRow,col]
+                    continue
+                #Check if searchGrid's value is matches the comparingGrid
+                elif boardList[searchRow][col] == boardList[row][col]:
+                    comparingGridCombined = True
+                    result = boardList[searchRow][col] + boardList[row][col]
+                    boardList[searchRow][col] = result
+                    boardList[row][col] = 0
 
-# FOR col IN RANGE(0,gridSize,1)
-#     SET bottomGrid = gridSize-1
-#     # Get the first uppervalue down to bottomgrid
-#     IF bottomGrid has no value
-#         for uppervalue IN range(gridSize - 2,-1,1)
-#             if uppervalue is not 0
-#                 SET bottomGrid AS uppergrid
-#                 DELETE uppervalue
-#                 BREAK
-#         # If still no value
-#         CONTINUE
-#
-#
+                    lockedGridList.append([searchRow,col])
+
+            #Check if no combination was made
+            if comparingGridCombined == False and currentEmptyGrid != None:
+                boardList[currentEmptyGrid[0]][currentEmptyGrid[1]] = boardList[row][col]
+                boardList[row][col] = 0
 
 
 
 
-
-
-
-# gridSize = int(input("Input grid size: "))
+# # gridSize = int(input("Input grid size: "))
 gridSize = 4
 
 setup()
-main()
+main() #Input some random values rn
 displayBoard()
 
+for i in range(1,100,1):
+    print("current loop: ",i)
 
+    if checkEmptyGrid() == True:
+        addOneValue()
+        movementDown()
+        displayBoard()
+    else:
+        break
 
-
+print("GameOver")
