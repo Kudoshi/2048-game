@@ -89,13 +89,12 @@ def displayBoard():
     print(horizontalLine)
 
 
-def movementDown():
+def movementDown(movement):
     def checkLockedGrid(searchRow,col):
         for element in lockedGridList:
             if element[0] == searchRow and element[1] == col:
                 return True
-    #Set movement values for the loops
-    movement = "Left"
+    #Get movement
     if movement == "Down":
         colRange = [0,gridSize,1] #Update sequence left to right
         rowRange = [gridSize-2, -1, -1] #Comparison grid move up
@@ -113,7 +112,7 @@ def movementDown():
         rowRange = [0,gridSize,1] #Update sequence top to bottom
         searchColRange = [1, gridSize, 1] #Search right Current col +1 get up
 
-
+    #Actual movement
     if movement == "Left" or movement == "Right":
         for row in range(rowRange[0], rowRange[1], rowRange[2]):
             print("Row Number: ", row)
@@ -210,7 +209,8 @@ for i in range(1,100,1):
         addOneValue()
         displayBoard()
         print("MOVEMENT DOWN")
-        movementDown()
+        movement = input("Input movement: ")
+        movementDown(movement)
         displayBoard()
     else:
         break
