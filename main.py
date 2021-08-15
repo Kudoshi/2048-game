@@ -1,9 +1,3 @@
-'''
-1) addOneValue 'SETTLE'
-2) DisplayBoard 'SETTLE'
-3) Movement & Combine Value
-4) Lose Screen
-'''
 import random
 import keyboard
 import time
