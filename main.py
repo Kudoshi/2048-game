@@ -83,7 +83,7 @@ def main():
             while True:
                 if keyboard.read_key():
                     break
-            return
+            break
 
         # Get user input
         while True:
